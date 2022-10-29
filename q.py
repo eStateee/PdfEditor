@@ -97,7 +97,7 @@ while True:  # The Event Loop
 
     event, values = window.read()
     filename = values['-FILE-'].split('/')[-1]
-    descr_type = get_description(descr_name=values['-DESCR-']).capitalize()
+    descr_type = get_description(descr_name=values['-DESCR-'].capitalize())
     prod_name = values['-PROD_NAME-']
     sub_name1 = values['-PROD_NAME1-']
     sub_name2 = ' ' + values['-PROD_NAME2-'].lower()
