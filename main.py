@@ -96,8 +96,10 @@ window = sg.Window('PdfEditor', layout)
 company_info = get_company_info()
 company_name = company_info[0].split(' ')
 while True:  # The Event Loop
-
     event, values = window.read()
+    if event in (sg.WINDOW_CLOSED,'Exit'):
+        break
+    
     file_path = values['-FILE-']
     filename = values['-FILE-'].split('/')[-1]
     descr_type = get_description(descr_name=values['-DESCR-'].capitalize())
@@ -123,3 +125,4 @@ while True:  # The Event Loop
     with open(os.path.join(READY_PATH, filename), "wb") as file:
         ready_writer.write(file)
     print(f'Файл {filename} Успешно изменен')
+window.close()
