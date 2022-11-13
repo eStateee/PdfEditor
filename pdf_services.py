@@ -20,9 +20,9 @@ def convert_pdf_to_docx() -> AnyStr:
 def redact_docx_file(doc, D):
     _pdf_path = os.path.join(TEMP_PATH, 'doc.pdf')
     # SET STYLES
-    style = doc.styles['Normal']
-    font = style.font
-    font.name = 'Arial'
+    # style = doc.styles['Normal']
+    # font = style.font
+    # font.name = 'Times New Roman'
 
     # REDACT
     for i in D.keys():
@@ -30,6 +30,8 @@ def redact_docx_file(doc, D):
             if j.text.find(i) >= 0:
                 j.text = j.text.replace(i, '')
                 runner = j.add_run(D[i])
+                font = runner.font
+                font.name = 'Times New Roman'
                 runner.font.size = docx.shared.Pt(36)
                 runner.bold = True
                 if i == 'qwe':
@@ -37,6 +39,7 @@ def redact_docx_file(doc, D):
                 elif i == 'asd':
                     runner.font.size = docx.shared.Pt(14)
                 elif i == 'zxc':
+                    runner.font.size = docx.shared.Pt(24)
                     runner.italic = True
     try:
         _redacted_docx_file_path = os.path.join(TEMP_PATH, 'doc.docx')

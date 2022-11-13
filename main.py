@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from typing import AnyStr
-from PyPDF2 import PdfReader,  PdfMerger
+from PyPDF2 import PdfReader, PdfMerger
 import docx
 ### Local imports
 from services import get_company_info, get_meta, add_meta, clear_temp_folder
@@ -16,20 +16,19 @@ layout = [
     [sg.Text(
         'Т-Тех. характеристики | О-Описание | П-Паспорт\nСИ-Описание типа средства измерений\nРП-Руководство | ИП-Инструкция',
         font='Verdano', text_color='yellow')],
-    [sg.Text('Тип описания: ', font='Verdano'), sg.InputText(key='-DESCR-', do_not_clear=False)],
-    [sg.Text('Название продукта: ', font='Verdano'), sg.InputText(key='-PROD_NAME-', do_not_clear=False)],
-    [sg.Text('1-е доп название продукта: ', font='Verdano'), sg.InputText(key='-PROD_NAME1-', do_not_clear=False)],
+    [sg.Text('Тип описания: ', font='Verdano'), sg.InputText(key='-DESCR-', do_not_clear=False, s=30)],
+    [sg.Text('Название продукта: ', font='Verdano'), sg.InputText(key='-PROD_NAME-', do_not_clear=False, s=75)],
+    [sg.Text('1-е доп название продукта:', font='Verdano'), sg.InputText(key='-PROD_NAME1-', do_not_clear=False, s=68)],
     [sg.Text('2-е доп название продукта(optional): ', font='Verdano'),
-     sg.InputText(key='-PROD_NAME2-', do_not_clear=False)],
-    [sg.Text('1-е название категории: ', font='Verdano'), sg.InputText(key='-GLOBAL_NAME1-', do_not_clear=False)],
-    [sg.Text('2-е название категории: ', font='Verdano'), sg.InputText(key='-GLOBAL_NAME2-', do_not_clear=False)],
-    [sg.Output(size=(80, 10))],
+     sg.InputText(key='-PROD_NAME2-', do_not_clear=False, s=58)],
+    [sg.Text('1-е название категории: ', font='Verdano'), sg.InputText(key='-GLOBAL_NAME1-', s=30)],
+    [sg.Text('2-е название категории: ', font='Verdano'), sg.InputText(key='-GLOBAL_NAME2-', s=30)],
+    [sg.Output(size=(100, 12))],
     [sg.Submit(s=20, button_color='green'), sg.Exit(s=15, button_color="tomato")]
 ]
 
 
 def change_before_pdf_file(values, descr_type) -> AnyStr:
-
     name = values['-PROD_NAME-']
     global_prod_name = values['-GLOBAL_NAME1-']
     _D = {
@@ -46,7 +45,7 @@ def change_before_pdf_file(values, descr_type) -> AnyStr:
         print('Oops... Some exception:(')
 
 
-def add_contacts(file_path, descr_type, values,filename) -> None:
+def add_contacts(file_path, descr_type, values, filename) -> None:
     merger = PdfMerger()
     original_pdf_file = open(os.path.join(file_path), 'rb')
     redacted_pdf_file_path = change_before_pdf_file(values=values, descr_type=descr_type)
@@ -55,7 +54,7 @@ def add_contacts(file_path, descr_type, values,filename) -> None:
     merger.append(original_pdf_file)
     merger.merge(position=0, fileobj=before, pages=(0, 1))
     merger.append(after)
-    output = open(os.path.join(READY_PATH,filename), "wb")
+    output = open(os.path.join(READY_PATH, filename), "wb")
     merger.write(output)
     merger.close()
     output.close()
@@ -74,7 +73,7 @@ def main():
         filename = values['-FILE-'].split('/')[-1]
         meta_data, descr_type = get_meta(values=values, company_info=company_info)
         # Add company contacts(before.pdf, after.pdf)
-        add_contacts(file_path=file_path, descr_type=descr_type, values=values,filename=filename)
+        add_contacts(file_path=file_path, descr_type=descr_type, values=values, filename=filename)
 
         # add meta_data and create writer object
         reader = PdfReader(os.path.join(READY_PATH, filename))
