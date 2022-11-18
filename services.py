@@ -1,7 +1,7 @@
 from typing import List, AnyStr
-from PyPDF2 import PdfWriter
 import csv
-from constants import *
+from constants import COMMON_META, TEMPLATES_PATH
+import os
 
 
 def get_company_info() -> List:
@@ -16,21 +16,6 @@ def get_company_info() -> List:
 
 company_info = get_company_info()
 company_name = company_info[0].split(' ')
-
-
-def add_meta(reader, author, meta) -> PdfWriter:
-    writer = PdfWriter()
-    for page in reader.pages:
-        writer.add_page(page)
-    writer.add_metadata(
-        {
-            "/Author": author,
-            "/Producer": "",
-            '/Subject': meta,
-            '/Title': meta
-        }
-    )
-    return writer
 
 
 def get_common_meta(company_name_eng, company_name_rus, company_country, prod_name, sub_name1, sub_name2__optional,
@@ -72,9 +57,9 @@ def get_meta(values, company_info) -> (AnyStr, AnyStr):
                             sub_name2__optional=sub_name2, descr_type=tech[0], global_prod_name=global_prod_name,
                             global_prod_name2=global_prod_name2, tech=tech[1])
 
-    if tech[2]:
+    try:
         return _meta, tech[2]
-    else:
+    except Exception:
         return _meta, tech[0]
 
 
@@ -83,3 +68,4 @@ def clear_temp_folder():
     for i in os.listdir(path):
         p = os.path.join(path, i)
         os.remove(p)
+
