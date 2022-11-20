@@ -1,6 +1,6 @@
 from typing import List, AnyStr
 import csv
-from constants import COMMON_META, TEMPLATES_PATH
+from constants import COMMON_META, TEMPLATES_PATH, TEMP_PATH
 import os
 
 
@@ -64,8 +64,7 @@ def get_meta(values, company_info) -> (AnyStr, AnyStr):
 
 
 def clear_temp_folder():
-    path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'temp')
-    for i in os.listdir(path):
-        p = os.path.join(path, i)
+    for i in os.listdir(TEMP_PATH):
+        p = os.path.join(TEMP_PATH, i)
         os.remove(p)
 

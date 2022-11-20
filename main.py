@@ -3,6 +3,8 @@ import PySimpleGUI as sg
 from pdf_services import add_contacts, add_meta, write_new_pdf_file
 from services import get_company_info, get_meta, clear_temp_folder
 from constants import TOOLTIP
+from tqdm import tqdm
+from functools import partialmethod
 
 layout = [
     [sg.Text('Файл:', font='Verdano'), sg.InputText(key='-FILE-', do_not_clear=False, font=20),
@@ -26,15 +28,12 @@ layout = [
 
 
 def main():
+    logging.disable(logging.CRITICAL)
+    tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
     window = sg.Window('PdfEditor', layout)
     company_info = get_company_info()
     while True:  # The Event Loop
         event, values = window.read()
-        logging.disable(logging.CRITICAL)
-        from tqdm import tqdm
-        from functools import partialmethod
-
-        tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
         if event in (sg.WINDOW_CLOSED, 'Exit'):
             break
         file_path = values['-FILE-']
