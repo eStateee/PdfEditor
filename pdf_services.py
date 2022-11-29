@@ -5,8 +5,10 @@ from docx2pdf import convert
 from docx.shared import Pt
 from constants import *
 from PyPDF2 import PdfMerger, PdfWriter, PdfReader
+from loguru import logger
 
 
+@logger.catch(message='An error occurred in converting PDF -> DOCX ')
 def convert_pdf_to_docx() -> AnyStr:
     _doc_file_name = 'd.docx'
     pdf_path = os.path.join(TEMPLATES_PATH, 'before.pdf')
@@ -15,6 +17,7 @@ def convert_pdf_to_docx() -> AnyStr:
     return docx_path
 
 
+@logger.catch(message='An error occurred in Redacting "before.pdf" file')
 def change_before_pdf_file(values, descr_type) -> AnyStr:
     name = values['-PROD_NAME-']
     global_prod_name = values['-GLOBAL_NAME1-']
@@ -25,13 +28,11 @@ def change_before_pdf_file(values, descr_type) -> AnyStr:
     }
     docx_path = convert_pdf_to_docx()  # path to docx file
     docx_document = docx.Document(docx_path)  # docx Entity
-    try:
-        _redacted_pdf_file_path = redact_docx_file(docx_document, _D)
-        return _redacted_pdf_file_path
-    except Exception:
-        print('Oops... Some exception:(')
+    _redacted_pdf_file_path = redact_docx_file(docx_document, _D)
+    return _redacted_pdf_file_path
 
 
+@logger.catch(message='An error occurred in Adding contacts to new .pdf file')
 def add_contacts(file_path, descr_type, values, filename) -> None:
     merger = PdfMerger()
     original_pdf_file = open(os.path.join(file_path), 'rb')
@@ -47,6 +48,7 @@ def add_contacts(file_path, descr_type, values, filename) -> None:
     output.close()
 
 
+@logger.catch(message='An error occurred in Adding meta data to new .pdf file')
 def add_meta(filename, author, meta) -> PdfWriter:
     reader = PdfReader(os.path.join(READY_PATH, filename))
     writer = PdfWriter()
@@ -63,6 +65,7 @@ def add_meta(filename, author, meta) -> PdfWriter:
     return writer
 
 
+@logger.catch(message='An error occurred in Redacting .docx file')
 def redact_docx_file(doc, D):
     _pdf_path = os.path.join(TEMP_PATH, 'doc.pdf')
 
@@ -92,7 +95,8 @@ def redact_docx_file(doc, D):
         return None
 
 
+@logger.catch(message='An error occurred in Creating ready .pdf file')
 def write_new_pdf_file(filename, writer):
     with open(os.path.join(READY_PATH, filename), "wb") as file:
         writer.write(file)
-    print(f'Файл {filename} Успешно изменен')
+    print(f'Файл {filename}, Успешно изменен')

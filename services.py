@@ -2,8 +2,10 @@ from typing import List, AnyStr
 import csv
 from constants import COMMON_META, TEMPLATES_PATH, TEMP_PATH
 import os
+from loguru import logger
 
 
+@logger.catch(message='An error in receiving data from .csv file')
 def get_company_info() -> List:
     res = []
     with open(os.path.join(TEMPLATES_PATH, 'company_info.csv'), encoding='utf-8') as file_obj:
@@ -11,6 +13,7 @@ def get_company_info() -> List:
 
         for row in reader_obj:
             res.append(' '.join(row))
+
     return res
 
 
@@ -32,6 +35,7 @@ def get_common_meta(company_name_eng, company_name_rus, company_country, prod_na
     return _temp
 
 
+@logger.catch(message='An error occurred in get_meta ')
 def get_meta(values, company_info) -> (AnyStr, AnyStr):
     _types = {
         'Т': ('Технические характеристики', 'Описание', 'тех. характеристики'),
@@ -45,7 +49,7 @@ def get_meta(values, company_info) -> (AnyStr, AnyStr):
     descr_type = values['-DESCR-'].upper()
     prod_name = values['-PROD_NAME-']
     sub_name1 = values['-PROD_NAME1-']
-    sub_name2 = ' ' + values['-PROD_NAME2-'].lower()
+    sub_name2 = ' ' + values['-PROD_NAME2-']
     global_prod_name = values['-GLOBAL_NAME1-'].lower()
     global_prod_name2 = values['-GLOBAL_NAME2-'].lower()
     if descr_type in _types.keys():
@@ -56,15 +60,14 @@ def get_meta(values, company_info) -> (AnyStr, AnyStr):
                             company_country=company_info[2], prod_name=prod_name, sub_name1=sub_name1,
                             sub_name2__optional=sub_name2, descr_type=tech[0], global_prod_name=global_prod_name,
                             global_prod_name2=global_prod_name2, tech=tech[1])
-
     try:
         return _meta, tech[2]
     except Exception:
         return _meta, tech[0]
 
 
+@logger.catch(message='An error in cleaning temp folder')
 def clear_temp_folder():
     for i in os.listdir(TEMP_PATH):
         p = os.path.join(TEMP_PATH, i)
         os.remove(p)
-
