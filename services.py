@@ -47,11 +47,11 @@ def get_meta(values, company_info) -> (AnyStr, AnyStr):
     }
 
     descr_type = values['-DESCR-'].upper()
-    prod_name = values['-PROD_NAME-']
-    sub_name1 = values['-PROD_NAME1-']
-    sub_name2 = ' ' + values['-PROD_NAME2-']
-    global_prod_name = values['-GLOBAL_NAME1-'].lower()
-    global_prod_name2 = values['-GLOBAL_NAME2-'].lower()
+    prod_name = values['-PROD_NAME-'].strip()
+    sub_name1 = values['-PROD_NAME1-'].strip()
+    sub_name2 = ' ' + values['-PROD_NAME2-'].strip()
+    global_prod_name = values['-GLOBAL_NAME1-'].lower().strip()
+    global_prod_name2 = values['-GLOBAL_NAME2-'].lower().strip()
     if descr_type in _types.keys():
         tech = _types[descr_type]
     else:
