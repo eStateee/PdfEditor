@@ -18,8 +18,7 @@ def get_company_info() -> List:
 
 
 company_info = get_company_info()
-company_name = company_info[0].split(' ')
-
+company_name = company_info[0].split('^^')
 
 def get_common_meta(company_name_eng, company_name_rus, company_country, prod_name, sub_name1, sub_name2__optional,
                     descr_type,
