@@ -140,3 +140,7 @@ dmypy.json
 
 #res
 /res/*.pdf
+
+#templets
+/template/*.pdf
+/templates/*.csv

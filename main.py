@@ -31,7 +31,7 @@ layout = [
 def main():
     logging.disable(logging.CRITICAL)
     tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
-    logger.add("logs\log.log", encoding='utf-8',
+    logger.add("logs/log.log", encoding='utf-8',
                format="{time:DD-MM-YYYY HH:mm:ss} | <level>{level: <8}</level> | {file} | {function} | {message}",
                retention="5 days", level='DEBUG')
     window = sg.Window('PdfEditor', layout)
