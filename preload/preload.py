@@ -1,5 +1,4 @@
 import os
-from constants import TEMPLATES_PATH
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
 files = {
@@ -8,9 +7,9 @@ files = {
     'company_info.csv': '1GCNOj2LcazPU24l_3DUTmSlqfTYGQUuT'
 }
 dirs = ('temp', 'res', 'templates')
+TEMPLATES_PATH = os.path.join(os.path.abspath(os.curdir), 'templates')
+root_path = os.path.join(os.path.abspath(os.path.join('../')))
 
-root_path = os.path.abspath(os.path.join('../'))
-print(root_path)
 for i_dir in dirs:
     if i_dir not in os.listdir(root_path):
         path = os.path.join(root_path, i_dir)
