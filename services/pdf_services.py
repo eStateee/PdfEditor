@@ -3,7 +3,8 @@ from pdf2docx import parse
 import docx
 from docx2pdf import convert
 from docx.shared import Pt
-from constants import *
+import os
+from constants import TEMPLATES_PATH, TEMP_PATH, READY_PATH
 from PyPDF2 import PdfMerger, PdfWriter, PdfReader
 from loguru import logger
 

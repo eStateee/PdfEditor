@@ -1,7 +1,7 @@
 import logging
 import PySimpleGUI as sg
-from pdf_services import add_contacts, add_meta, write_new_pdf_file
-from services import get_company_info, get_meta, clear_temp_folder
+from services.pdf_services import add_contacts, add_meta, write_new_pdf_file
+from services.service import get_company_info, get_meta, clear_temp_folder
 from constants import TOOLTIP
 from tqdm import tqdm
 from functools import partialmethod
